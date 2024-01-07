@@ -19,9 +19,9 @@ return new class extends Migration
             $table->text('body');
             $table->text('image');
             $table->tinyInteger('status')->default(0);
-            $table->tinyInteger('commentable')->default(0)->comment('0 =>oncommenttable , 1 => commentable');
+            $table->tinyInteger('commenttable')->default(0)->comment('0 =>oncommenttable , 1 => commentable');
             $table->string('tags');
-            $table->timestamps('published_at');
+            $table->timestamp('published_at');
             $table->foreignId('author_id')->constrained('users');
             $table->foreignId('category_id')->constrained('post_categories');
             $table->timestamps();
