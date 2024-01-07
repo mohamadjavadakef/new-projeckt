@@ -11,14 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('post_categories', function (Blueprint $table) {
+        Schema::create('posts_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description');
+            $table->string('title');
             $table->string('sluq')->unique()->nullable();
+            $table->text('summary');
+            $table->text('body');
             $table->text('image');
             $table->tinyInteger('status')->default(0);
+            $table->tinyInteger('commentable')->default(0)->comment('0 =>oncommenttable , 1 => commentable');
             $table->string('tags');
+            $table->timestamps('published_at');
+            $table->foreignId('author_id')->constrained('users');
+            $table->foreignId('category_id')->constrained('post_categories');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -29,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('post_categories');
+        Schema::dropIfExists('posts_categories');
     }
 };
