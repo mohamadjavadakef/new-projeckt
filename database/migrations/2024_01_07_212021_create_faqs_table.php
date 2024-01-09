@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('faqs_categories', function (Blueprint $table) {
+        Schema::create('faqs', function (Blueprint $table) {
             $table->id();
             $table->text('question');
             $table->text('answer');
@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('tags');
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('faqs_categories');
+        Schema::dropIfExists('faqs');
     }
 };
