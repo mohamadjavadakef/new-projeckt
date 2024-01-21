@@ -8,19 +8,19 @@
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item font-size-12"> <a href="#">خانه</a></li>
-      <li class="breadcrumb-item font-size-12"> <a href="#">بخش فروش</a></li>
-      <li class="breadcrumb-item font-size-12 active" aria-current="page"> دسته بندی</li>
+        <li class="breadcrumb-item font-size-12"> <a href="#">خانه</a></li>
+        <li class="breadcrumb-item font-size-12"> <a href="#">بخش فروش</a></li>
+        <li class="breadcrumb-item font-size-12 active" aria-current="page"> دسته بندی</li>
     </ol>
-  </nav>
+</nav>
 
 
-  <section class="row">
+<section class="row">
     <section class="col-12">
         <section class="main-body-container">
             <section class="main-body-container-header">
                 <h5>
-                  دسته بندی
+                دسته بندی
                 </h5>
             </section>
             @include('admin.alerts.alert-section.success')
@@ -68,7 +68,7 @@
                                 <form class="d-inline" action="{{ route('admin.content.category.destroy' , $postCategory->id ) }}" method="POST">
                                     @csrf
                                     {{ method_field('delete') }}
-                                    <button class="btn btn-danger btn-sm" type="submit"><i class="fa fa-trash-alt"></i> حذف</button>
+                                    <button class="btn btn-danger btn-sm delete" type="submit"><i class="fa fa-trash-alt"></i> حذف</button>
                                 </form>
                             </td>
                         </tr>
@@ -100,19 +100,58 @@
                 if(response.status){
                     if(response.checked){
                         element.prop('checked' , true);
+                        successToast('دسته بندی با موفقیت انجام شد');
                     }
                     else{
                         element.prop('checked' , false);
+                        successToast('دسته بندی با موفقیت غیرفعال شد شد');
                     }
                 }
                 else{
                     element.prop('checked' , elementValue);
+                    errorToast('هنگام ویرایش مشکلی رخداد');
                 }
+            },
+            error : function(){
+                element.prop('checked' , elementValue);
+                errorToast('ارتباط برقرار نشد');
             }
-        })
+        });
+        function errorToast(message){
+
+            var errorToastTag = '<section class="toast" data-delay="5000">\n' +
+                '<section class="toast-bady p-3 d-flex bg-danger text-white">\n' +
+                    '<strong class="ml-auto">'+message+'</strong>\n' +
+                    '<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"><span aria-hidden="true">&times;</span></button>\n' +
+                    '</section>'+
+                    '</section>';
+
+                    $('.toast-wrapper').append(errorToastTag);
+                    $('.toast').toast('show').delay(5500).queue(function(){
+                        $(this).remove();
+                    });
+        }
+        function successToast(message){
+
+            var successToastTag = '<section class="toast" data-delay="5000">\n' +
+                '<section class="toast-bady p-3 d-flex bg-success text-white">\n' +
+                    '<strong class="ml-auto">'+message+'</strong>\n' +
+                    '<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"><span aria-hidden="true">&times;</span></button>\n' +
+                    '</section>'+
+                    '</section>';
+
+                    $('.toast-wrapper').append(successToastTag);
+                    $('.toast').toast('show').delay(5500).queue(function(){
+                        $(this).remove();
+                    });
+        }
+
     }
 
 
 </script>
 
+@include('admin.alerts.sweetalert.delete-confirm' , ['className' => 'delete'])
+
 @endsection
+

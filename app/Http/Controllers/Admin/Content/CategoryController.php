@@ -52,7 +52,7 @@ class CategoryController extends Controller
      */
     public function edit(PostCategory $postCategory)
     {
-        return view('admin.content.category.edit', compact('postCategory'));
+        return view('admin.content.category.edit', compact('postCategory'))->with('swal-success' , 'دسته بندی  شما با موفقیت ویرایش شد');
     }
 
     /**
@@ -63,7 +63,7 @@ class CategoryController extends Controller
         $inputs = $request->all();
         $inputs['image']= 'image';
         $postCategory->update($inputs);
-        return redirect()->route('admin.content.category.index');
+        return redirect()->route('admin.content.category.index')->with('swal-success' , 'دسته بندی  شما با موفقیت ویرایش شد');
     }
 
     /**
