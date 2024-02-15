@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin\Content;
 
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Content\PostCategory;
 use App\Http\Requests\Admin\Content\PostCategoryRequest;
+use App\Http\Services\Image\ImageService;
+use App\Models\Content\PostCategory;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
@@ -30,10 +31,20 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(PostCategoryRequest $request)
+    public function store(PostCategoryRequest $request,ImageService $imageService)
     {
         $inputs = $request->all();
-        $inputs['image']= 'image';
+        if($request->hasFile('image')){
+            $imageService->setExclusiveDirectory('images'. DIRECTORY_SEPARATOR . 'post-category');
+            // $inputs['image'] = $imageService->save($request->file('image'));
+            // $inputs['image'] = $imageService->fitAndSave($request->file('image'),600,150);
+            // exit;
+            $result = $imageService->createIndexAndSave($request->file('image'));
+
+        }
+        if($result === false){
+            return redirect()->route('admin.content.category.index')->with('swal-error' , 'آپلود تصویر با خطلا مواجه شد');
+        }
         $postCategory = PostCategory::create($inputs);
         return redirect()->route('admin.content.category.index')->with('swal-success' , 'دسته بندی جدید شما با موفقیت ثبت شد');
     }
